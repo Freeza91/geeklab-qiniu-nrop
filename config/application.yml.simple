@@ -7,3 +7,8 @@ test:
 production:
   foo: production
   bar: bar
+
+# 使用
+# default: &default
+#   hello: hello #居然没法玩？？？
+
