@@ -1,0 +1,22 @@
+default: &default
+  encoding: utf8
+  reconnect: true
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  adapter: postgresql
+  database: geeklab_dev
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: geeklab_test
+
+production:
+  <<: *default
+  adapter: postgresql
+  database: geeklab_pro
