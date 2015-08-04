@@ -14,5 +14,3 @@ threaded: true
 no-epoll: true
 daemonize: true
 socket: tmp/sockets/thin.sock
-# chdir: /path/to/your/apps/root
-# tag: a-name-to-show-up-in-ps aux

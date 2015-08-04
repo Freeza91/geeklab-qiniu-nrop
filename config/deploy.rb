@@ -1,8 +1,7 @@
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
-require 'mina/rvm' #rbenv
-# require 'mina/whenever'
+require 'mina/rvm'
 
 set :domain, '119.254.101.120'
 set :branch, 'master'
@@ -11,11 +10,11 @@ set :user, 'deploy'
 set :forward_agent, true
 set :port, 9527
 
-set :deploy_to, '/home/deploy/thin-deploy'
+set :deploy_to, '/home/deploy/qiniu-nrop'
 set :current_path, 'current'
 set :app_path,  "#{deploy_to}/#{current_path}"
 
-set :repository, 'git@gitlab.com:hunter/thin-deploy.git'
+set :repository, 'git@github.com:rudyboy/geeklab-qiniu-nrop.git'
 set :keep_releases, 5
 
 set :thin_pid, lambda { "#{deploy_to}/#{shared_path}/tmp/pids/thin.pid" }
@@ -54,15 +53,6 @@ task deploy: :environment do
     invoke :'deploy:cleanup'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    queue! %{
-      cd "#{app_path}"
-      bundle exec rake db:migrate RACK_ENV=production
-    }
-
-    queue! %{
-      cd "#{app_path}"
-      bundle exec rake assets:precompile RACK_ENV=production
-    }
 
     to :launch do
       invoke :'thin:restart'
@@ -77,7 +67,7 @@ namespace :thin do
     queue 'echo "-----> Start thin"'
     queue! %{
       cd #{app_path}
-      bundle exec thin -p 9000 -e production -d start
+      bundle exec thin -p 9393 -e production -d start
     }
   end
 
