@@ -9,6 +9,7 @@ gem 'rest-client'
 
 gem 'thin'
 gem 'pg'
+gem 'slim'
 gem 'qiniu'
 
 group :development do

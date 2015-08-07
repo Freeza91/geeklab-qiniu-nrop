@@ -1,7 +1,12 @@
 class ApplicationController < MyApp
 
   get  '/' do
-    "welcome to qiniu auth "
+    p "hello "
+    redirect '/test'
+  end
+
+  get '/test' do
+    slim :'/uploader'
   end
 
 end
