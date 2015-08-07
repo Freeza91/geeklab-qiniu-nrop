@@ -6,7 +6,15 @@ class ApplicationController < MyApp
   end
 
   get '/test' do
-    slim :'/uploader'
+    #slim :'/uploader'
+    erb: '/index'
   end
 
+  post '/upload' do
+    p 'upload file'
+    json = {
+      msg: '上传成功'
+    }
+    render json: json
+  end
 end

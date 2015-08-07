@@ -1,0 +1,91 @@
+<div id="upload">
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UploadTest</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div>
+    <div class="btns">
+      <div id="picker">选择视频</div>
+      <button id="upload-start">开始上传</button>
+    </div>
+    <div id="upload-info">
+      <span name="status"></span>
+      <span name="time"></span>
+    </div>
+    <div>
+      <ul id="file-list">
+      </ul>
+    </div>
+  </div>
+  <script>
+    $(function() {
+      var uploader = WebUploader.create({
+        <%#swf: './webuploader/Uploader.swf',%>
+        server: '/upload',
+        pick: '#picker',
+        resize: false
+        // chunked: true
+        //sendAsBinary: true
+      });
+
+      var uploadInfo = {},
+          $list = $('#file-list');
+
+      // 当有文件添加进队列
+      uploader.on('fileQueued', function (file) {
+        // 显示选择的文件
+        $list.append('<div id="' + file.id + '" class="item">'
+                      + '<h4 class="info">' + file.name + '</h4>'
+                      + '<p class="state"> 等待上传...</p>'
+                      + '</div>');
+      });
+
+      // 开始上传按钮
+      $('#upload-start').on('click', function () {
+        var file = uploader.getFiles[0];
+        uploader.upload(file);
+        uploadInfo.startTime = new Date().getTime();
+      });
+
+      // 上传进度
+      uploader.on('uploadProgress', function (file, percentage) {
+        var $progress = $('#progress');
+        var $li = $('#' + file.id);
+            $progress = $li.find('.progress');
+        if(! $progress.length) {
+          $progress = $('<div class="progress">'
+                        + '<progress class="progress-bar" max="1"></progress>'
+                        + '<span class="percentage"></span>'
+                        + '<span>%</span>'
+                        + '</div>').appendTo($li);
+        }
+        $progress.find('.progress-bar').attr('value', percentage);
+        $progress.find('.percentage').text(percentage * 100);
+        $li.find('.state').text('正在上传');
+      });
+
+      // 上传成功
+      uploader.on('uploadSuccess', function (file) {
+        var now = new Date().getTime(),
+            time = now - uploadInfo.startTime,
+            $li = $('#' + file.id);
+        $li.append('<p>上传成功 耗时' + time / 1000 + 's</p>');
+      });
+
+      // 上传失败
+      uploader.on('uploadError', function (file) {
+        $li.append('<p>上传失败</p>');
+      });
+
+      // 不论上传成功还是失败，都会触发uploadComplete事件
+      uploader.on('uploadComplete', function (file) {
+      });
+    });
+  </script>
+</body>
+</html>
