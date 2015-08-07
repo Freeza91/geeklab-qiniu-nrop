@@ -5,16 +5,13 @@ class ApplicationController < MyApp
     redirect '/test'
   end
 
-  get '/test' do
-    #slim :'/uploader'
-    erb: '/index'
+  get '/uploader' do
+    erb :'/uploader'
   end
 
   post '/upload' do
-    p 'upload file'
     json = {
       msg: '上传成功'
-    }
-    render json: json
+    }.to_json
   end
 end
