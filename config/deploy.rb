@@ -67,7 +67,7 @@ namespace :thin do
     queue 'echo "-----> Start thin"'
     queue! %{
       cd #{app_path}
-      bundle exec thin -p 9393 -e production -d start
+      bundle exec thin -e production -C "#{app_path}/config/thin" -R config.ru -d start
     }
   end
 
@@ -76,7 +76,7 @@ namespace :thin do
     queue 'echo "-----> Stop thin"'
     queue! %{
       cd #{app_path}
-      bundle exec thin stop
+      bundle exec thin stop -C "#{app_path}/config/thin"
     }
   end
 
