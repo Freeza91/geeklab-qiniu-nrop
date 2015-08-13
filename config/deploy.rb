@@ -75,8 +75,8 @@ namespace :thin do
   task stop: :environment do
     queue 'echo "-----> Stop thin"'
     queue! %{
-      test -s #{thin_pid} && kill -QUIT `cat "#{thin_pid}"` && cd #{thin_pids_filder} && rm * && echo "-----> Stop Ok" && exit 0
-      echo >&2 "Not running"
+      cd #{app_path}
+      bundle exec thin stop
     }
   end
 
