@@ -17,9 +17,6 @@ set :app_path,  "#{deploy_to}/#{current_path}"
 set :repository, 'git@github.com:rudyboy/geeklab-qiniu-nrop.git'
 set :keep_releases, 5
 
-set :thin_pid, lambda { "#{deploy_to}/#{shared_path}/tmp/pids/thin.pid" }
-set :thin_pids_filder, lambda { "#{deploy_to}/#{shared_path}/tmp/pids/" }
-
 set :shared_paths, [
   'config/database.yml',
   'config/application.yml',
@@ -56,7 +53,6 @@ task deploy: :environment do
 
     to :launch do
       invoke :'thin:restart'
-      queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
 end
@@ -67,7 +63,7 @@ namespace :thin do
     queue 'echo "-----> Start thin"'
     queue! %{
       cd #{app_path}
-      bundle exec thin -e production -C "#{app_path}/config/thin" -R config.ru -d start
+      bundle exec thin -e production -C "#{app_path}/config/thin.yml" -R config.ru -d start
     }
   end
 
@@ -76,7 +72,7 @@ namespace :thin do
     queue 'echo "-----> Stop thin"'
     queue! %{
       cd #{app_path}
-      bundle exec thin stop -C "#{app_path}/config/thin"
+      ls tmp/pids | grep thin && echo "some server is running " && bundle exec thin stop -C "#{app_path}/config/thin.yml" && echo "not running & stop success"
     }
   end
 

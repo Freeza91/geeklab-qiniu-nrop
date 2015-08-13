@@ -1,6 +1,4 @@
 ---
-user: www-data
-group: www-data
 pid: tmp/pids/thin.pid
 timeout: 30
 wait: 30
